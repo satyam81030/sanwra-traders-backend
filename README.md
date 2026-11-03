@@ -52,5 +52,6 @@ Leave `MONGODB_URI` empty for in-memory Mongo + seed.
 
 ## Frontends
 
-- User storefront: https://github.com/satyam81030/sanwra-traders-frontend
+- User storefront (canonical): https://github.com/satyam81030/sanwra-traders
 - Admin app: https://github.com/satyam81030/sanwra-traders-admin
+- Legacy name `sanwra-traders-frontend` — use **`sanwra-traders`** for Vercel instead
