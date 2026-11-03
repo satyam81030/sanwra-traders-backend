@@ -1,5 +1,16 @@
 import mongoose, { Schema, type InferSchemaType } from "mongoose";
 
+export const PRODUCT_CATEGORIES = [
+  "jeans",
+  "tshirts",
+  "shirts",
+  "lowers",
+  "trousers",
+  "outerwear",
+  "accessories",
+  "other",
+] as const;
+
 const productSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -11,7 +22,7 @@ const productSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ["shirts", "trousers", "dresses", "outerwear", "knitwear", "accessories", "other"],
+      enum: PRODUCT_CATEGORIES,
     },
     available: { type: Boolean, default: true },
     imageUrl: { type: String, default: "" },

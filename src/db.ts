@@ -3,7 +3,7 @@ import path from "path";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { config } from "./config";
-import { seedProductsIfEmpty } from "./seedData";
+import { seedProductsIfEmpty, seedSettings } from "./seedData";
 
 let memoryServer: MongoMemoryServer | null = null;
 
@@ -13,6 +13,7 @@ export async function connectDb(): Promise<{ mode: "atlas" | "memory"; uri: stri
       await mongoose.connect(config.mongodbUri);
       console.log("[db] Connected to MongoDB Atlas (MONGODB_URI)");
       await seedProductsIfEmpty();
+      await seedSettings();
       return { mode: "atlas", uri: "(redacted)" };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -42,6 +43,7 @@ export async function connectDb(): Promise<{ mode: "atlas" | "memory"; uri: stri
   await mongoose.connect(uri);
   console.log("[db] Connected to in-memory MongoDB");
   await seedProductsIfEmpty();
+  await seedSettings();
   return { mode: "memory", uri };
 }
 

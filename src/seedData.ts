@@ -1,78 +1,72 @@
 import { Product } from "./models/Product";
+import { getOrCreateSettings } from "./models/Settings";
 
-/** Placeholder product imagery (Unsplash — free to use for demos). */
 const SAMPLE = [
   {
-    name: "Indigo Khadi Shirt",
-    description:
-      "Handwoven khadi cotton in deep indigo. Soft collar, mother-of-pearl buttons, cut for everyday wear from market mornings to evening chai.",
-    price: 1899,
+    name: "Slim Fit Blue Jeans",
+    description: "Comfort stretch denim, everyday men's jeans — mid wash, classic five-pocket.",
+    price: 1299,
     currency: "INR",
-    size: "M",
+    size: "32",
+    category: "jeans",
+    available: true,
+    imageUrl:
+      "https://images.unsplash.com/photo-1542272604-787c3835535d?w=800&q=80",
+  },
+  {
+    name: "Checked Casual Shirt",
+    description: "Soft cotton check shirt for daily wear. Regular fit, button-down collar.",
+    price: 899,
+    currency: "INR",
+    size: "L",
     category: "shirts",
     available: true,
     imageUrl:
       "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80",
   },
   {
-    name: "Sand Linen Trousers",
-    description:
-      "Breathable sand-washed linen with a clean front crease. Mid-rise, tapered ankle — made for warm days and long walks.",
-    price: 2499,
-    currency: "INR",
-    size: "L",
-    category: "trousers",
-    available: true,
-    imageUrl:
-      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
-  },
-  {
-    name: "Marigold Block-Print Dress",
-    description:
-      "Cotton voile dress with marigold block print. Soft gathers at the waist, side pockets, and a hem that moves with you.",
-    price: 3299,
-    currency: "INR",
-    size: "S",
-    category: "dresses",
-    available: true,
-    imageUrl:
-      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80",
-  },
-  {
-    name: "Charcoal Wool Overshirt",
-    description:
-      "Heavyweight brushed wool overshirt in charcoal. Dual chest pockets, horn buttons — layer over tees or under a coat.",
-    price: 4599,
-    currency: "INR",
-    size: "L",
-    category: "outerwear",
-    available: true,
-    imageUrl:
-      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
-  },
-  {
-    name: "Cream Merino Crew",
-    description:
-      "Fine merino crewneck in warm cream. Light enough for layered days, soft enough for bare skin.",
-    price: 2799,
+    name: "Graphic Cotton Tee",
+    description: "Breathable cotton t-shirt with bold print. Soft hand-feel, regular fit.",
+    price: 499,
     currency: "INR",
     size: "M",
-    category: "knitwear",
-    available: false,
-    imageUrl:
-      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80",
-  },
-  {
-    name: "Woven Leather Belt",
-    description:
-      "Vegetable-tanned leather belt with a woven face and brushed brass buckle. Fits 28–36 waist with spare holes.",
-    price: 999,
-    currency: "INR",
-    size: "One size",
-    category: "accessories",
+    category: "tshirts",
     available: true,
     imageUrl:
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+  },
+  {
+    name: "Track Lower — Navy",
+    description: "Comfortable men's lower for home and travel. Elastic waist, side pockets.",
+    price: 699,
+    currency: "INR",
+    size: "L",
+    category: "lowers",
+    available: true,
+    imageUrl:
+      "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=800&q=80",
+  },
+  {
+    name: "Polo Collar Tee Pack Feel",
+    description: "Smart-casual polo knit — clean collar, short sleeves, everyday colour.",
+    price: 799,
+    currency: "INR",
+    size: "L",
+    category: "tshirts",
+    available: true,
+    imageUrl:
+      "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=800&q=80",
+  },
+  {
+    name: "Chino Lower — Beige",
+    description: "Smart beige chino-style lower. Straight cut for office-casual days.",
+    price: 1099,
+    currency: "INR",
+    size: "34",
+    category: "lowers",
+    available: true,
+    imageUrl:
+      "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80",
   },
 ] as const;
 
@@ -82,4 +76,8 @@ export async function seedProductsIfEmpty(): Promise<number> {
   await Product.insertMany([...SAMPLE]);
   console.log(`[seed] Inserted ${SAMPLE.length} sample products`);
   return SAMPLE.length;
+}
+
+export async function seedSettings(): Promise<void> {
+  await getOrCreateSettings();
 }

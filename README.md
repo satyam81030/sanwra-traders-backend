@@ -1,85 +1,56 @@
 # Sanwra Traders API
 
-Node.js + Express + TypeScript REST API for the Sanwra Traders clothing storefront. Public product reads; admin-only JWT auth for product CRUD and image upload.
+Express + TypeScript API for **सांवरा ट्रेडर्स / Sanwra Traders**.
 
-## Stack
+Serves:
+- Public product catalog
+- Public store settings (WhatsApp contact, UPI ID / QR)
+- Public order submit (after UPI payment — no shopper auth)
+- Admin JWT auth for products, settings, and orders
 
-- Express + TypeScript (`tsx` in development)
-- MongoDB via Mongoose
-- JWT admin auth (`ADMIN_EMAIL` / `ADMIN_PASSWORD`)
-- Cloudinary for images when `CLOUDINARY_*` is set; otherwise local `/uploads` or image URLs
-
-## Local development
+## Local
 
 ```bash
-cd backend
 cp .env.example .env
 npm install
 npm run dev
 ```
 
-Default URL: [http://127.0.0.1:4311](http://127.0.0.1:4311)
+→ http://127.0.0.1:4311 · Health: `/health`
 
-- Health: `GET /health`
-- Products: `GET /api/products`
-- Admin login: `POST /api/auth/login` with `{ "email", "password" }`
+Leave `MONGODB_URI` empty for in-memory Mongo + seed.
 
-### MongoDB without Atlas (local/dev)
+## Env
 
-Leave `MONGODB_URI` empty. The server starts an **in-memory MongoDB** and seeds sample clothing items. Data is lost when the process exits.
-
-### Free MongoDB Atlas (M0) — production / shared DB
-
-1. Sign up at [https://www.mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas).
-2. Create a **free M0** cluster (Shared / Free tier).
-3. **Database Access** → add a user (username + password).
-4. **Network Access** → allow `0.0.0.0/0` (required for Render) or your IPs.
-5. **Connect** → Drivers → copy the `mongodb+srv://...` URI; replace `<password>` and set a DB name (e.g. `sanwra`).
-6. Set `MONGODB_URI` in `.env` or on Render.
-
-### Cloudinary (optional, free tier)
-
-1. Create a free account at [https://cloudinary.com](https://cloudinary.com).
-2. Copy Cloud name, API Key, API Secret into `CLOUDINARY_*`.
-3. If unset, admin uploads are saved under `uploads/` and served at `/uploads/...`, or you can paste an image URL.
-
-## Environment variables
-
-See `.env.example`. Important:
-
-| Variable | Purpose |
-|----------|---------|
-| `PORT` | Listen port (Render sets this) |
-| `MONGODB_URI` | Atlas URI (required in production) |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Single admin login |
-| `JWT_SECRET` | JWT signing secret |
-| `CORS_ORIGIN` | Comma-separated frontend origins |
+| Variable | Notes |
+|----------|--------|
+| `PORT` | Render sets this |
+| `MONGODB_URI` | Required in production (Atlas M0) |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Single admin |
+| `JWT_SECRET` | Strong random in production |
+| `CORS_ORIGIN` | **Both** Vercel origins (storefront + admin), comma-separated |
 | `CLOUDINARY_*` | Optional image hosting |
 
-Default local admin: `admin@sanwratraders.com` / `changeme-admin` (change in production).
+## API
 
-## API overview
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| GET | `/api/products` | — | Catalog |
+| GET | `/api/settings` | — | Contact + UPI |
+| POST | `/api/orders` | — | Submit paid order (name, phone, items) |
+| POST | `/api/auth/login` | — | Admin JWT |
+| CRUD | `/api/products` | Bearer | Admin products |
+| PUT | `/api/settings` | Bearer | Contact / UPI / QR |
+| GET/PATCH | `/api/orders` | Bearer | View / update order status |
 
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| GET | `/health` | — | Health check |
-| GET | `/api/products` | — | List products (`?available=true`, `?category=`) |
-| GET | `/api/products/:id` | — | Product detail |
-| POST | `/api/auth/login` | — | Admin login → JWT |
-| GET | `/api/auth/me` | Bearer | Current admin |
-| POST | `/api/products` | Bearer | Create (JSON or `multipart/form-data` with `image`) |
-| PUT | `/api/products/:id` | Bearer | Update |
-| DELETE | `/api/products/:id` | Bearer | Delete |
+## Render
 
-Product fields: `name`, `description`, `price`, `currency`, `size`, `category` (`shirts` \| `trousers` \| `dresses` \| `outerwear` \| `knitwear` \| `accessories` \| `other`), `available`, `imageUrl`.
+- Build: `npm install && npm run build`
+- Start: `npm start`
+- Health: `/health`
+- Set `CORS_ORIGIN` to storefront **and** admin Vercel URLs
 
-## Deploy on Render
+## Frontends
 
-1. Connect this GitHub repo as a **Web Service**.
-2. Settings:
-   - **Build command:** `npm install && npm run build`
-   - **Start command:** `npm start`
-   - **Health check path:** `/health`
-3. Environment variables: set all from `.env.example` (especially `MONGODB_URI`, `JWT_SECRET`, `ADMIN_*`, `CORS_ORIGIN`).
-4. Set `CORS_ORIGIN` to your Vercel URLs, e.g.  
-   `https://sanwratraders.com,https://www.sanwratraders.com,https://your-app.vercel.app`
+- User storefront: https://github.com/satyam81030/sanwra-traders-frontend
+- Admin app: https://github.com/satyam81030/sanwra-traders-admin

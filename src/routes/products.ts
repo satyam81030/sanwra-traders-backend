@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import { Product } from "../models/Product";
+import { PRODUCT_CATEGORIES, Product } from "../models/Product";
 import { requireAdmin } from "../middleware/auth";
 import { deleteImage, resolveImageInput, uploadBuffer } from "../services/images";
 
@@ -18,15 +18,7 @@ const upload = multer({
   },
 });
 
-const CATEGORIES = [
-  "shirts",
-  "trousers",
-  "dresses",
-  "outerwear",
-  "knitwear",
-  "accessories",
-  "other",
-] as const;
+const CATEGORIES = PRODUCT_CATEGORIES;
 
 function serialize(doc: InstanceType<typeof Product>) {
   const o = doc.toObject();

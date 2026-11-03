@@ -5,7 +5,9 @@ import fs from "fs";
 import { config } from "./config";
 import { connectDb } from "./db";
 import { authRouter } from "./routes/auth";
+import { ordersRouter } from "./routes/orders";
 import { productsRouter } from "./routes/products";
+import { settingsRouter } from "./routes/settings";
 
 async function main() {
   fs.mkdirSync(config.uploadsDir, { recursive: true });
@@ -48,12 +50,16 @@ async function main() {
       name: "Sanwra Traders API",
       health: "/health",
       products: "/api/products",
+      settings: "/api/settings",
+      orders: "/api/orders",
       auth: "/api/auth/login",
     });
   });
 
   app.use("/api/auth", authRouter);
   app.use("/api/products", productsRouter);
+  app.use("/api/settings", settingsRouter);
+  app.use("/api/orders", ordersRouter);
 
   app.use(
     (
